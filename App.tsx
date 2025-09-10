@@ -282,17 +282,15 @@ setError(err instanceof Error ? err.message : "Ocurrió un error desconocido.");
 
 
   return (
-    <div className="min-h-screen bg-black text-gray-300 font-sans">
+    <div className="min-h-screen bg-white text-gray-800 font-sans">
       <header className="bg-white sticky top-0 z-20 p-4 border-b border-white/10">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
-            {/* Logo a la izquierda del título, sin gradientes */}
-            <div className="ec-logo flex items-center justify-center rounded-md">
-              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect x="0" y="0" width="32" height="32" rx="6" fill="var(--color-rojo)" />
-                <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle" fontFamily="Mulish, sans-serif" fontWeight="800" fontSize="14" fill="var(--color-blanco)">EC</text>
-              </svg>
+            {/* Logo transparente de Imgur */}
+            <div className="header-logo-embed ec-logo">
+              <blockquote className="imgur-embed-pub" lang="en" data-id="nlRBQtX"><a href="https://imgur.com/nlRBQtX">View post on imgur.com</a></blockquote>
             </div>
+            <span className="ec-sep" aria-hidden="true">|</span>
             <h1 className="text-2xl font-bold tracking-tight cursor-pointer leading-none" onClick={handleResetApp}>
               <span className="text-orange-500">Estudio</span>
               <span className="text-yellow-400"> Creativo</span>
