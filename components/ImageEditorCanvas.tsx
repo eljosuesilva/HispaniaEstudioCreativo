@@ -185,9 +185,9 @@ const ImageEditorCanvas: React.FC<ImageEditorCanvasProps> = ({ onImageSelect, in
         <div
             ref={containerRef}
             onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}
-            className={`relative w-full aspect-square bg-black rounded-lg flex items-center justify-center transition-colors duration-200 select-none ${
+            className={`relative w-full aspect-square bg-[#FAFAFA] rounded-lg flex items-center justify-center transition-colors duration-200 select-none ${
             isDragging ? 'outline-dashed outline-2 outline-orange-500 bg-orange-500/10' : ''
-            } ${initialImageUrl ? 'p-0' : 'p-4 border-2 border-dashed border-white/20'}`}
+            } ${initialImageUrl ? 'p-0' : 'p-4 border-2 border-dashed border-[rgba(51,51,51,0.12)]'}`}
         >
             {!initialImageUrl ? (
                 <label htmlFor="file-upload" className="flex flex-col items-center justify-center text-gray-500 cursor-pointer w-full h-full">

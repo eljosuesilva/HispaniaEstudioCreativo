@@ -26,7 +26,7 @@ const HistoryItem: React.FC<{ item: GeneratedContent; onUseImage: (url: string) 
     );
 
     return (
-        <div className="bg-gray-900/50 p-3 rounded-lg border border-white/10">
+        <div className="bg-gray-900/50 p-3 rounded-lg border border-white/10 ec-card">
             {/* Two-step result */}
             {item.secondaryImageUrl && item.imageUrl && (
                 <div className="grid grid-cols-2 gap-3">

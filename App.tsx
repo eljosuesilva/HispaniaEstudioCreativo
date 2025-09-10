@@ -284,28 +284,33 @@ setError(err instanceof Error ? err.message : "Ocurrió un error desconocido.");
   return (
     <div className="min-h-screen bg-white text-gray-800 font-sans">
       <header className="bg-white sticky top-0 z-20 p-4 border-b border-white/10">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            {/* Logo transparente de Imgur */}
-            <div className="header-logo-embed ec-logo">
-              <blockquote className="imgur-embed-pub" lang="en" data-id="nlRBQtX"><a href="https://imgur.com/nlRBQtX">View post on imgur.com</a></blockquote>
-            </div>
-            <span className="ec-sep" aria-hidden="true">|</span>
+        <div className="container mx-auto grid grid-cols-3 items-center">
+          {/* Izquierda: Título */}
+          <div className="justify-self-start">
             <h1 className="text-2xl font-bold tracking-tight cursor-pointer leading-none" onClick={handleResetApp}>
               <span className="text-orange-500">Estudio</span>
               <span className="text-yellow-400"> Creativo</span>
             </h1>
           </div>
-          <button
-            onClick={toggleHistoryPanel}
-            className="flex items-center gap-2 py-2 px-3 text-sm font-semibold rounded-md border border-white/10 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200"
-            aria-label="Mostrar/ocultar historial"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-            </svg>
-            <span>Historial</span>
-          </button>
+          {/* Centro: Logo */}
+          <div className="justify-self-center">
+            <a href="https://hispaniacolors.es/es_es/" target="_blank" rel="noopener noreferrer" className="block">
+              <img src="https://i.imgur.com/nlRBQtX.png" alt="Hispania Colors" className="ec-logo-img" />
+            </a>
+          </div>
+          {/* Derecha: Botón Historial */}
+          <div className="justify-self-end">
+            <button
+              onClick={toggleHistoryPanel}
+              className="flex items-center gap-2 py-2 px-3 text-sm font-semibold rounded-md border border-white/10 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200"
+              aria-label="Mostrar/ocultar historial"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+              </svg>
+              <span>Historial</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -333,7 +338,7 @@ Elegir otro efecto
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Input Column */}
-              <div className="flex flex-col gap-6 p-6 bg-gray-950/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-2xl shadow-black/20">
+              <div className="flex flex-col gap-6 p-6 bg-gray-950/60 backdrop-blur-lg rounded-xl border border-white/10 ec-card">
                 <div>
                   <div className="mb-4">
                     <h2 className="text-xl font-semibold mb-1 text-orange-500 flex items-center gap-3">
@@ -416,7 +421,7 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
               </div>
 
               {/* Output Column */}
-              <div className="flex flex-col p-6 bg-gray-950/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-2xl shadow-black/20">
+              <div className="flex flex-col p-6 bg-gray-950/60 backdrop-blur-lg rounded-xl border border-white/10 ec-card">
 <h2 className="text-xl font-semibold mb-4 text-orange-500 self-start">Resultado</h2>
                 {isLoading && <div className="flex-grow flex items-center justify-center"><LoadingSpinner message={loadingMessage} /></div>}
                 {error && <div className="flex-grow flex items-center justify-center w-full"><ErrorMessage message={error} /></div>}
