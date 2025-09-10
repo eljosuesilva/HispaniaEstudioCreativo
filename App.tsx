@@ -1,7 +1,7 @@
 
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { TRANSFORMATIONS } from './constants';
+import { TRANSFORMATIONS } from './constants.hc';
 import { editImage } from './services/geminiService';
 import type { GeneratedContent, Transformation } from './types';
 import TransformationSelector from './components/TransformationSelector';
@@ -10,7 +10,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import ImageEditorCanvas from './components/ImageEditorCanvas';
 // Fix: Removed unused and non-existent 'fileToDataUrl' import.
-import { dataUrlToFile, embedWatermark, loadImage, resizeImageToMatch, downloadImage } from './utils/fileUtils';
+import { dataUrlToFile, embedWatermark, loadImage, resizeImageToMatch, downloadImage, overlayLogo } from './utils/fileUtils';
 import ImagePreviewModal from './components/ImagePreviewModal';
 import MultiImageUploader from './components/MultiImageUploader';
 import HistoryPanel from './components/HistoryPanel';
@@ -55,6 +55,7 @@ const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>('none');
   const [history, setHistory] = useState<GeneratedContent[]>([]);
   const [isHistoryPanelOpen, setIsHistoryPanelOpen] = useState<boolean>(false);
+  const [includeLogo, setIncludeLogo] = useState<boolean>(false);
   
   useEffect(() => {
     try {
@@ -172,7 +173,11 @@ setLoadingMessage('Paso 2: Aplicando paleta de colores...');
             );
             
             if (stepTwoResult.imageUrl) {
-stepTwoResult.imageUrl = await embedWatermark(stepTwoResult.imageUrl, "Estudio Creativo");
+              let withMark = await embedWatermark(stepTwoResult.imageUrl, "Estudio Creativo");
+              if (includeLogo) {
+                withMark = await overlayLogo(withMark, { position: 'bottom-right', backdrop: true });
+              }
+              stepTwoResult.imageUrl = withMark;
             }
 
             const finalResult = {
@@ -200,7 +205,11 @@ setLoadingMessage('Generando tu obra...');
             );
 
             if (result.imageUrl) {
-result.imageUrl = await embedWatermark(result.imageUrl, "Estudio Creativo");
+              let withMark = await embedWatermark(result.imageUrl, "Estudio Creativo");
+              if (includeLogo) {
+                withMark = await overlayLogo(withMark, { position: 'bottom-right', backdrop: true });
+              }
+              result.imageUrl = withMark;
             }
 
             setGeneratedContent(result);
@@ -213,7 +222,7 @@ setError(err instanceof Error ? err.message : "Ocurrió un error desconocido.");
       setIsLoading(false);
       setLoadingMessage('');
     }
-  }, [primaryImageUrl, secondaryImageUrl, selectedTransformation, maskDataUrl, customPrompt, transformations]);
+  }, [primaryImageUrl, secondaryImageUrl, selectedTransformation, maskDataUrl, customPrompt, transformations, includeLogo]);
 
 
   const handleUseImageAsInput = useCallback(async (imageUrl: string) => {
@@ -358,6 +367,11 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
                     )}
                   </div>
                   
+                  <div className="-mt-2 mb-2 flex items-center gap-2">
+                    <input id="include-logo" type="checkbox" checked={includeLogo} onChange={(e) => setIncludeLogo(e.target.checked)} className="w-4 h-4" />
+                    <label htmlFor="include-logo" className="text-sm">Añadir logo de Hispania Colors a la imagen</label>
+                  </div>
+
                   {selectedTransformation.isMultiImage ? (
                     <MultiImageUploader
                       onPrimarySelect={handlePrimaryImageSelect}
