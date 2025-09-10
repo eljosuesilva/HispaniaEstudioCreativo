@@ -457,6 +457,17 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
                         {selectedTransformation.forceMaskTool && activeTool !== 'mask' && (
                           <p className="text-xs text-red-700 mt-2">Esta transformación requiere que marques con la máscara solo la banda de la bandera antes de generar.</p>
                         )}
+                        {maskDataUrl && (
+                          <div className="mt-3">
+                            <div className="text-sm font-medium mb-1">Vista máscara</div>
+                            <div className="relative h-36 border border-white/10 rounded-md overflow-hidden bg-white">
+                              {primaryImageUrl && (
+                                <img src={primaryImageUrl} alt="Base" className="absolute inset-0 w-full h-full object-contain" />
+                              )}
+                              <img src={maskDataUrl} alt="Máscara" className="absolute inset-0 w-full h-full object-contain opacity-90" />
+                            </div>
+                          </div>
+                        )}
                     </div>
                   )}
                   

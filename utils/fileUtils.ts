@@ -413,6 +413,7 @@ export const applyFlagToMaskedRegion = async (
   mctx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
   const mdata = mctx.getImageData(0, 0, canvas.width, canvas.height).data;
   let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+  let sumX = 0, sumY = 0, sumXX = 0, sumYY = 0, sumXY = 0, count = 0;
   for (let y = 0; y < canvas.height; y++) {
     for (let x = 0; x < canvas.width; x++) {
       const a = mdata[(y * canvas.width + x) * 4 + 3];
@@ -421,6 +422,8 @@ export const applyFlagToMaskedRegion = async (
         if (y < minY) minY = y;
         if (x > maxX) maxX = x;
         if (y > maxY) maxY = y;
+        // stats for PCA
+        sumX += x; sumY += y; sumXX += x * x; sumYY += y * y; sumXY += x * y; count++;
       }
     }
   }
@@ -431,31 +434,47 @@ export const applyFlagToMaskedRegion = async (
 
   const bw = maxX - minX + 1;
   const bh = maxY - minY + 1;
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+
+  // Estimate dominant axis angle using PCA on mask pixels
+  let theta = 0;
+  if (count > 0) {
+    const meanX = sumX / count, meanY = sumY / count;
+    const covXX = sumXX / count - meanX * meanX;
+    const covYY = sumYY / count - meanY * meanY;
+    const covXY = sumXY / count - meanX * meanY;
+    theta = 0.5 * Math.atan2(2 * covXY, covXX - covYY); // major eigenvector angle
+  }
 
   // Paint stripes inside bounding box
   const total = flag.stripes.reduce((acc, s) => acc + s.ratio, 0);
+  // Draw stripes in a rotated coordinate system aligned with the mask's long axis
+  sctx.save();
+  sctx.translate(cx, cy);
+  sctx.rotate(theta); // band axis ~ horizontal in this frame
   if (flag.orientation === 'vertical') {
-    let cursor = minX;
+    let cursor = -bw / 2;
     for (let i = 0; i < flag.stripes.length; i++) {
       const seg = flag.stripes[i];
-      // Use remaining space for the last stripe to avoid gaps por rounding
       const isLast = i === flag.stripes.length - 1;
-      const w = isLast ? (minX + bw - cursor) : Math.round((seg.ratio / total) * bw);
+      const w = isLast ? (-cursor + bw / 2) : Math.round((seg.ratio / total) * bw);
       sctx.fillStyle = seg.color;
-      sctx.fillRect(cursor, minY, Math.max(1, w), bh);
+      sctx.fillRect(cursor, -bh / 2, Math.max(1, w), bh);
       cursor += w;
     }
   } else {
-    let cursor = minY;
+    let cursor = -bh / 2;
     for (let i = 0; i < flag.stripes.length; i++) {
       const seg = flag.stripes[i];
       const isLast = i === flag.stripes.length - 1;
-      const h = isLast ? (minY + bh - cursor) : Math.round((seg.ratio / total) * bh);
+      const h = isLast ? (-cursor + bh / 2) : Math.round((seg.ratio / total) * bh);
       sctx.fillStyle = seg.color;
-      sctx.fillRect(minX, cursor, bw, Math.max(1, h));
+      sctx.fillRect(-bw / 2, cursor, bw, Math.max(1, h));
       cursor += h;
     }
   }
+  sctx.restore();
 
   // Clip stripes to mask
   sctx.globalCompositeOperation = 'destination-in';
