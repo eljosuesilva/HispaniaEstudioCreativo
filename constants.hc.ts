@@ -22,7 +22,7 @@ export const TRANSFORMATIONS: Transformation[] = [
   },
   {
     title: "Macro de detalle",
-    prompt: "Create an extreme macro close‑up using the input accessory (do not replace it): show leather grain, metal edges and stitching with focus‑stacked sharpness. High contrast micro‑lighting, clean specular highlights, 4K clarity. Keep palette neutral and elegant; avoid strong color tints unless they improve realism. No text, no watermark.",
+    prompt: "Create an extreme macro close‑up using the input accessory (do not replace it): show leather grain, metal edges and stitching with focus‑stacked sharpness. High contrast micro‑lighting, clean specular highlights, 4K clarity. Keep palette neutral and elegant; avoid strong color tints unless they improve realism. Avoid national crests or printed emblems unless present in the input band. No text, no watermark.",
     emoji: "🔎",
     description: "Primerísimo primer plano con texturas perfectas."
   },
@@ -148,13 +148,14 @@ export const TRANSFORMATIONS: Transformation[] = [
   },
   {
     title: "Cambiar bandera de la pulsera",
-    prompt: "Using the input photo, change ONLY the flag band on the bracelet to the national flag of {country}. Keep the bracelet design, materials, lighting, camera angle, background and shadows exactly as in the original. The new flag must be accurate in colors and stripe order (e.g., Italy = vertical green, white, red). Do not move, resize or replace the product. Ultra‑realistic 4K result. No text, no watermark.",
+    prompt: "Using the input photo, change ONLY the masked flag band on the bracelet to the national flag of {country}. Respect the exact mask region; keep the rest of the image (leather braid, blue cords, tag, clasp, lighting, shadows, background, camera angle) completely unchanged. The new flag must be accurate in colors, stripe order and orientation (e.g., Italy = vertical green on the left, white center, red on the right). Preserve scale, texture and stitching continuity where the band meets the leather. Do not invent extra logos or crests unless the real flag contains them. Ultra‑realistic 4K result, no text, no watermark.",
     emoji: "🚩",
     description: "Reemplaza exclusivamente la bandera por la del país elegido.",
     requiresInputParam: true,
     paramLabel: "País",
     paramPlaceholder: "Italia",
-    paramToken: "{country}"
+    paramToken: "{country}",
+    forceMaskTool: true
   }
 ];
 

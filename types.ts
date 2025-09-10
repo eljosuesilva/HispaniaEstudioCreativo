@@ -19,6 +19,8 @@ export interface Transformation {
   paramPlaceholder?: string;
   /** Token in prompt to be replaced with the user value. Default: {country} */
   paramToken?: string;
+  /** If true, encourage/require the user to draw a mask before generating */
+  forceMaskTool?: boolean;
 }
 
 export interface GeneratedContent {
