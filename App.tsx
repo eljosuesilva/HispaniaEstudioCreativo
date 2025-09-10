@@ -52,6 +52,7 @@ const App: React.FC = () => {
   const [maskDataUrl, setMaskDataUrl] = useState<string | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const [customPrompt, setCustomPrompt] = useState<string>('');
+  const [paramValue, setParamValue] = useState<string>('');
   const [activeTool, setActiveTool] = useState<ActiveTool>('none');
   const [history, setHistory] = useState<GeneratedContent[]>([]);
   const [isHistoryPanelOpen, setIsHistoryPanelOpen] = useState<boolean>(false);
@@ -116,7 +117,11 @@ setError("Por favor sube las dos imágenes requeridas.");
         return;
     }
     
-    const promptToUse = selectedTransformation.prompt === 'CUSTOM' ? customPrompt : selectedTransformation.prompt;
+    let promptToUse = selectedTransformation.prompt === 'CUSTOM' ? customPrompt : selectedTransformation.prompt;
+    if (selectedTransformation.requiresInputParam) {
+      const token = selectedTransformation.paramToken ?? '{country}';
+      promptToUse = promptToUse.replace(token, paramValue || 'Spain');
+    }
     if (!promptToUse.trim()) {
 setError("Por favor escribe un prompt que describa el cambio que deseas ver.");
         return;
@@ -363,7 +368,22 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
                             className="w-full mt-2 p-3 bg-gray-900 border border-white/20 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors placeholder-gray-500"
                         />
                     ) : (
-                       <p className="text-gray-400">{selectedTransformation.description}</p>
+                       <>
+                         <p className="text-gray-400">{selectedTransformation.description}</p>
+                         {selectedTransformation.requiresInputParam && (
+                           <div className="mt-3 flex items-center gap-3">
+                             <label htmlFor="trans-param" className="text-sm whitespace-nowrap">{selectedTransformation.paramLabel ?? 'Parámetro'}</label>
+                             <input
+                               id="trans-param"
+                               type="text"
+                               value={paramValue}
+                               onChange={(e) => setParamValue(e.target.value)}
+                               placeholder={selectedTransformation.paramPlaceholder ?? 'Escribe aquí'}
+                               className="flex-1 p-2 bg-gray-900 border border-white/20 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                             />
+                           </div>
+                         )}
+                       </>
                     )}
                   </div>
                   
