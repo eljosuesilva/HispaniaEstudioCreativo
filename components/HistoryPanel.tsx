@@ -33,7 +33,7 @@ const HistoryItem: React.FC<{ item: GeneratedContent; onUseImage: (url: string) 
                     {/* Line Art */}
                     <div className="flex flex-col gap-2">
                         <img src={item.secondaryImageUrl} className="rounded-md aspect-square object-contain bg-black" alt="Line Art Result" />
-<div className=\"text-xs text-center text-gray-400 mb-1\">Dibujo de líneas</div>
+<div className="text-xs text-center text-gray-400 mb-1">Dibujo de líneas</div>
                         <div className="grid grid-cols-2 gap-1.5 text-xs">
                             <ActionButton onClick={() => onUseImage(item.secondaryImageUrl!)} isPrimary>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2-2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>
@@ -48,7 +48,7 @@ Guardar
                     {/* Final Result */}
                     <div className="flex flex-col gap-2">
                         <img src={item.imageUrl} className="rounded-md aspect-square object-contain bg-black" alt="Final Result" />
-<div className=\"text-xs text-center text-gray-400 mb-1\">Resultado final</div>
+<div className="text-xs text-center text-gray-400 mb-1">Resultado final</div>
                         <div className="grid grid-cols-2 gap-1.5 text-xs">
                             <ActionButton onClick={() => onUseImage(item.imageUrl!)} isPrimary>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2-2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>
