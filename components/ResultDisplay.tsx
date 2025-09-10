@@ -144,8 +144,8 @@ const imageOptions: ImageSelection[] = ['Original', 'Dibujo de líneas', 'Result
                     onClick={() => setTwoStepViewMode(mode)}
                     className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors duration-200 ${
                     twoStepViewMode === mode
-                        ? 'bg-gradient-to-r from-orange-500 to-yellow-400 text-black'
-                        : 'text-gray-300 hover:bg-gray-700'
+                        ? 'ec-toggle-active'
+                        : 'text-gray-800 hover:bg-gray-300'
                     }`}
                 >
 {twoStepLabels[mode]}
@@ -176,7 +176,7 @@ Descargar ambas
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2-2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>
 Usar dibujo de líneas como entrada
                     </button>
-                    <button onClick={() => onUseImageAsInput(content.imageUrl!)} className="flex-1 py-2 px-4 bg-gradient-to-r from-orange-500 to-yellow-400 text-black font-semibold rounded-lg shadow-md shadow-orange-500/20 hover:from-orange-600 hover:to-yellow-500 transition-all duration-200 flex items-center justify-center gap-2">
+                    <button onClick={() => onUseImageAsInput(content.imageUrl!)} className="flex-1 py-2 px-4 ec-btn-primary font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2">
                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2-2H4a2 2 0 01-2-2V6z" clipRule="evenodd" /></svg>
 Usar resultado final como entrada
                     </button>
@@ -237,7 +237,7 @@ Usar resultado final como entrada
                 </button>
                 <button
                 onClick={() => onUseImageAsInput(content.imageUrl!)}
-                className="flex-1 py-2 px-4 bg-gradient-to-r from-orange-500 to-yellow-400 text-black font-semibold rounded-lg shadow-md shadow-orange-500/20 hover:from-orange-600 hover:to-yellow-500 transition-all duration-200 flex items-center justify-center gap-2"
+                className="flex-1 py-2 px-4 ec-btn-primary font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
                 >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
@@ -261,8 +261,8 @@ Usar resultado final como entrada
                 onClick={() => setViewMode(mode)}
                 className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors duration-200 ${
                 viewMode === mode
-                    ? 'bg-gradient-to-r from-orange-500 to-yellow-400 text-black'
-                    : 'text-gray-300 hover:bg-gray-700'
+                    ? 'ec-toggle-active'
+                    : 'text-gray-800 hover:bg-gray-300'
                 }`}
             >
 {viewLabels[mode]}
@@ -344,7 +344,7 @@ Usar resultado final como entrada
             </button>
             <button
               onClick={() => onUseImageAsInput(content.imageUrl!)}
-              className="flex-1 py-2 px-4 bg-gradient-to-r from-orange-500 to-yellow-400 text-black font-semibold rounded-lg shadow-md shadow-orange-500/20 hover:from-orange-600 hover:to-yellow-500 transition-all duration-200 flex items-center justify-center gap-2"
+              className="flex-1 py-2 px-4 ec-btn-primary font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
             >
                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />

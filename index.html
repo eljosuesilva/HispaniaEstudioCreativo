@@ -25,28 +25,29 @@
       body.bg-black { background-color: var(--color-blanco) !important; color: var(--color-gris-oscuro) !important; }
       /* Tipografía general en superficies claras */
       .text-gray-300, .text-gray-200, .text-gray-400 { color: var(--color-gris-oscuro) !important; }
+      .text-yellow-400 { color: var(--color-amarillo) !important; }
       /* Superficies (tarjetas y contenedores) */
       .bg-gray-950, .bg-gray-900, .bg-gray-950\/60, .bg-gray-800, .bg-gray-800\/50, .bg-gray-700, .bg-gray-700\/50 { background-color: var(--color-blanco) !important; color: var(--color-gris-oscuro) !important; }
       /* Bordes sutiles */
       .border-white\/10, .border-white\/20 { border-color: rgba(51,51,51,0.12) !important; }
-      /* Acentos (mapeo de naranja/amarillo a tu rojo/amarillo) */
+      /* Acentos y utilidades sin gradientes */
       .text-orange-500 { color: var(--color-rojo) !important; }
       .hover\:text-orange-400:hover { color: var(--color-amarillo) !important; }
-      .from-orange-500 { --tw-gradient-from: var(--color-rojo) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(255 199 31 / 0)) !important; }
-      .to-yellow-400 { --tw-gradient-to: var(--color-amarillo) !important; }
-      .hover\:from-orange-600:hover { --tw-gradient-from: var(--color-rojo) !important; }
-      .hover\:to-yellow-500:hover { --tw-gradient-to: var(--color-amarillo) !important; }
+      .ec-btn-primary { background-color: var(--color-rojo); color: var(--color-blanco); box-shadow: 0 4px 12px rgba(198,0,0,0.15); }
+      .ec-toggle-active { background-color: var(--color-amarillo); color: var(--color-gris-oscuro); }
+      .ec-accent { background-color: var(--color-azul-marino); color: var(--color-blanco); }
+      .ec-logo { width: 32px; height: 32px; }
+      /* Remap utilidades tailwind usadas a la paleta */
+      .bg-orange-500 { background-color: var(--color-rojo) !important; }
+      .bg-yellow-400 { background-color: var(--color-amarillo) !important; }
       /* Botones con grises al pasar el ratón */
       .hover\:bg-gray-700:hover, .hover\:bg-gray-700\/50:hover { background-color: var(--color-gris-claro) !important; color: var(--color-gris-oscuro) !important; }
       /* Áreas de entrada */
       .bg-gray-900, textarea.bg-gray-900 { background-color: var(--color-gris-claro) !important; }
       .placeholder-gray-500::placeholder { color: #8A8A8A !important; }
-      /* Control del tamaño del embed de Imgur en el header */
-      .header-logo-embed { width: 40px; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-      .header-logo-embed .imgur-embed-pub { max-width: 40px !important; }
-      iframe[src*="imgur.com"] { width: 40px !important; height: 40px !important; }
+      /* Quitar reglas del embed anterior del logo (ya no se usa) */
     </style>
-    <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+    
 </head>
   <body class="bg-black text-gray-300">
     <div id="root"></div>

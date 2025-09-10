@@ -283,26 +283,31 @@ setError(err instanceof Error ? err.message : "Ocurrió un error desconocido.");
 
   return (
     <div className="min-h-screen bg-black text-gray-300 font-sans">
-      <header className="bg-black/60 backdrop-blur-lg sticky top-0 z-20 p-4 border-b border-white/10">
+      <header className="bg-white sticky top-0 z-20 p-4 border-b border-white/10">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-400 cursor-pointer" onClick={handleResetApp}>
-            Estudio Creativo
-          </h1>
           <div className="flex items-center gap-3">
-            <div className="header-logo-embed">
-              <blockquote className="imgur-embed-pub" lang="en" data-id="nlRBQtX"><a href="https://imgur.com/nlRBQtX">View post on imgur.com</a></blockquote>
+            {/* Logo a la izquierda del título, sin gradientes */}
+            <div className="ec-logo flex items-center justify-center rounded-md">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="0" y="0" width="32" height="32" rx="6" fill="var(--color-rojo)" />
+                <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle" fontFamily="Mulish, sans-serif" fontWeight="800" fontSize="14" fill="var(--color-blanco)">EC</text>
+              </svg>
             </div>
-            <button
+            <h1 className="text-2xl font-bold tracking-tight cursor-pointer leading-none" onClick={handleResetApp}>
+              <span className="text-orange-500">Estudio</span>
+              <span className="text-yellow-400"> Creativo</span>
+            </h1>
+          </div>
+          <button
             onClick={toggleHistoryPanel}
-            className="flex items-center gap-2 py-2 px-3 text-sm font-semibold text-gray-200 bg-gray-800/50 rounded-md hover:bg-gray-700/50 transition-colors duration-200"
-aria-label="Mostrar/ocultar historial"
+            className="flex items-center gap-2 py-2 px-3 text-sm font-semibold rounded-md border border-white/10 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200"
+            aria-label="Mostrar/ocultar historial"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
             </svg>
-<span>Historial</span>
+            <span>Historial</span>
           </button>
-          </div>
         </div>
       </header>
 
@@ -378,7 +383,7 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
                         <button
                             onClick={toggleMaskTool}
                             className={`w-full flex items-center justify-center gap-2 py-2 px-3 text-sm font-semibold rounded-md transition-colors duration-200 ${
-                                activeTool === 'mask' ? 'bg-gradient-to-r from-orange-500 to-yellow-400 text-black' : 'bg-gray-800 hover:bg-gray-700'
+                                activeTool === 'mask' ? 'ec-toggle-active' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                             }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
@@ -390,7 +395,7 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
                    <button
                     onClick={handleGenerate}
                     disabled={isGenerateDisabled}
-                    className="w-full mt-6 py-3 px-4 bg-gradient-to-r from-orange-500 to-yellow-400 text-black font-semibold rounded-lg shadow-lg shadow-orange-500/20 hover:from-orange-600 hover:to-yellow-500 disabled:bg-gray-800 disabled:from-gray-800 disabled:to-gray-800 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+                    className="w-full mt-6 py-3 px-4 ec-btn-primary font-semibold rounded-lg shadow hover:opacity-90 disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <>

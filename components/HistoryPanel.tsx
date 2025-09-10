@@ -17,8 +17,8 @@ const HistoryItem: React.FC<{ item: GeneratedContent; onUseImage: (url: string) 
             onClick={onClick}
             className={`w-full flex items-center justify-center gap-1.5 py-1.5 px-2 text-xs font-semibold rounded-md transition-colors duration-200 ${
                 isPrimary 
-                ? 'bg-gradient-to-r from-orange-500 to-yellow-400 text-black shadow-sm shadow-orange-500/20 hover:from-orange-600 hover:to-yellow-500' 
-                : 'bg-gray-800 hover:bg-gray-700 text-gray-200'
+                ? 'ec-btn-primary shadow-sm' 
+                : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
             }`}
         >
             {children}
