@@ -282,7 +282,7 @@ setError(err instanceof Error ? err.message : "Ocurrió un error desconocido.");
 
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 font-sans">
+    <div className="min-h-screen bg-white text-gray-800">
       <header className="bg-white sticky top-0 z-20 p-4 border-b border-white/10">
         <div className="container mx-auto grid grid-cols-3 items-center">
           {/* Izquierda: Título */}
