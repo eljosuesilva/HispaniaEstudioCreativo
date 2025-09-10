@@ -244,3 +244,242 @@ export const overlayLogo = async (
 
   return canvas.toDataURL('image/png');
 };
+
+// -------------------------
+// Flag replacement pipeline
+// -------------------------
+
+type FlagOrientation = 'vertical' | 'horizontal';
+
+interface FlagStripe { color: string; ratio: number; }
+
+export interface FlagSpec { orientation: FlagOrientation; stripes: FlagStripe[]; }
+
+const NAMED_FLAGS: Record<string, FlagSpec> = {
+  // Italy / Italia
+  'italy': { orientation: 'vertical', stripes: [
+    { color: '#009246', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#CE2B37', ratio: 1 },
+  ] },
+  'italia': { orientation: 'vertical', stripes: [
+    { color: '#009246', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#CE2B37', ratio: 1 },
+  ] },
+  // Spain / España (simplified, without crest)
+  'spain': { orientation: 'horizontal', stripes: [
+    { color: '#AA151B', ratio: 2 },
+    { color: '#F1BF00', ratio: 4 },
+    { color: '#AA151B', ratio: 2 },
+  ] },
+  
+  'france': { orientation: 'vertical', stripes: [
+    { color: '#0055A4', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#EF4135', ratio: 1 },
+  ] },
+  'francia': { orientation: 'vertical', stripes: [
+    { color: '#0055A4', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#EF4135', ratio: 1 },
+  ] },
+  'germany': { orientation: 'horizontal', stripes: [
+    { color: '#000000', ratio: 1 },
+    { color: '#DD0000', ratio: 1 },
+    { color: '#FFCC00', ratio: 1 },
+  ] },
+  'alemania': { orientation: 'horizontal', stripes: [
+    { color: '#000000', ratio: 1 },
+    { color: '#DD0000', ratio: 1 },
+    { color: '#FFCC00', ratio: 1 },
+  ] },
+  'portugal': { orientation: 'vertical', stripes: [
+    { color: '#006600', ratio: 2 },
+    { color: '#FF0000', ratio: 3 },
+  ] },
+  'españa': { orientation: 'horizontal', stripes: [
+    { color: '#AA151B', ratio: 2 },
+    { color: '#F1BF00', ratio: 4 },
+    { color: '#AA151B', ratio: 2 },
+  ] },
+  'netherlands': { orientation: 'horizontal', stripes: [
+    { color: '#AE1C28', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#21468B', ratio: 1 },
+  ] },
+  'países bajos': { orientation: 'horizontal', stripes: [
+    { color: '#AE1C28', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#21468B', ratio: 1 },
+  ] },
+  'belgium': { orientation: 'vertical', stripes: [
+    { color: '#000000', ratio: 1 },
+    { color: '#FDDA24', ratio: 1 },
+    { color: '#EF3340', ratio: 1 },
+  ] },
+  'bélgica': { orientation: 'vertical', stripes: [
+    { color: '#000000', ratio: 1 },
+    { color: '#FDDA24', ratio: 1 },
+    { color: '#EF3340', ratio: 1 },
+  ] },
+  'ireland': { orientation: 'vertical', stripes: [
+    { color: '#169B62', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#FF883E', ratio: 1 },
+  ] },
+  'irlanda': { orientation: 'vertical', stripes: [
+    { color: '#169B62', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#FF883E', ratio: 1 },
+  ] },
+  'poland': { orientation: 'horizontal', stripes: [
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#DC143C', ratio: 1 },
+  ] },
+  'polonia': { orientation: 'horizontal', stripes: [
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#DC143C', ratio: 1 },
+  ] },
+  'austria': { orientation: 'horizontal', stripes: [
+    { color: '#ED2939', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#ED2939', ratio: 1 },
+  ] },
+  'romania': { orientation: 'vertical', stripes: [
+    { color: '#002B7F', ratio: 1 },
+    { color: '#FCD116', ratio: 1 },
+    { color: '#CE1126', ratio: 1 },
+  ] },
+  'rumanía': { orientation: 'vertical', stripes: [
+    { color: '#002B7F', ratio: 1 },
+    { color: '#FCD116', ratio: 1 },
+    { color: '#CE1126', ratio: 1 },
+  ] },
+  'hungary': { orientation: 'horizontal', stripes: [
+    { color: '#CD2A3E', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#436F4D', ratio: 1 },
+  ] },
+  'hungría': { orientation: 'horizontal', stripes: [
+    { color: '#CD2A3E', ratio: 1 },
+    { color: '#FFFFFF', ratio: 1 },
+    { color: '#436F4D', ratio: 1 },
+  ] },
+};
+
+export const getFlagSpec = (countryRaw: string): FlagSpec | null => {
+  const k = (countryRaw || '').trim().toLowerCase();
+  if (!k) return null;
+  if (NAMED_FLAGS[k]) return NAMED_FLAGS[k];
+  // Try to normalize with accents removed
+  const norm = k.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  if (NAMED_FLAGS[norm]) return NAMED_FLAGS[norm];
+  return null; // Unknown
+};
+
+/**
+ * Replace the masked region with a clean flag pattern while preserving shading/texture.
+ * 1) Paint stripes into a canvas
+ * 2) Clip by mask
+ * 3) Composite onto the base using source-over (color) + multiply with grayscale shading
+ */
+export const applyFlagToMaskedRegion = async (
+  baseImageDataUrl: string,
+  maskDataUrl: string,
+  flag: FlagSpec
+): Promise<string> => {
+  const baseImg = await loadImage(baseImageDataUrl);
+  const maskImg = await loadImage(maskDataUrl);
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get canvas context.');
+  canvas.width = baseImg.width;
+  canvas.height = baseImg.height;
+  ctx.drawImage(baseImg, 0, 0);
+
+  // Build stripes layer over a separate canvas
+  const stripes = document.createElement('canvas');
+  stripes.width = canvas.width;
+  stripes.height = canvas.height;
+  const sctx = stripes.getContext('2d')!;
+
+  // Determine mask bounding box to limit painted area
+  const tmpMask = document.createElement('canvas');
+  tmpMask.width = canvas.width;
+  tmpMask.height = canvas.height;
+  const mctx = tmpMask.getContext('2d')!;
+  mctx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
+  const mdata = mctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+  for (let y = 0; y < canvas.height; y++) {
+    for (let x = 0; x < canvas.width; x++) {
+      const a = mdata[(y * canvas.width + x) * 4 + 3];
+      if (a > 8) { // mask pixel present
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (minX > maxX || minY > maxY) {
+    // No mask found; return original
+    return baseImageDataUrl;
+  }
+
+  const bw = maxX - minX + 1;
+  const bh = maxY - minY + 1;
+
+  // Paint stripes inside bounding box
+  const total = flag.stripes.reduce((acc, s) => acc + s.ratio, 0);
+  if (flag.orientation === 'vertical') {
+    let cursor = minX;
+    for (const seg of flag.stripes) {
+      const w = Math.round((seg.ratio / total) * bw);
+      sctx.fillStyle = seg.color;
+      sctx.fillRect(cursor, minY, w, bh);
+      cursor += w;
+    }
+  } else {
+    let cursor = minY;
+    for (const seg of flag.stripes) {
+      const h = Math.round((seg.ratio / total) * bh);
+      sctx.fillStyle = seg.color;
+      sctx.fillRect(minX, cursor, bw, h);
+      cursor += h;
+    }
+  }
+
+  // Clip stripes to mask
+  sctx.globalCompositeOperation = 'destination-in';
+  sctx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
+  sctx.globalCompositeOperation = 'source-over';
+
+  // Shading: grayscale mask of base × multiply over stripes for texture
+  const shade = document.createElement('canvas');
+  shade.width = canvas.width; shade.height = canvas.height;
+  const shctx = shade.getContext('2d')!;
+  shctx.filter = 'grayscale(1)';
+  shctx.drawImage(baseImg, 0, 0);
+  shctx.filter = 'none';
+  shctx.globalCompositeOperation = 'destination-in';
+  shctx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
+  shctx.globalCompositeOperation = 'source-over';
+
+  // Composite onto base: first clear masked color slightly to reduce bleed
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.drawImage(maskImg, 0, 0, canvas.width, canvas.height);
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Lay stripes
+  ctx.drawImage(stripes, 0, 0);
+  // Add shading
+  ctx.globalCompositeOperation = 'multiply';
+  ctx.drawImage(shade, 0, 0);
+  ctx.globalCompositeOperation = 'source-over';
+
+  return canvas.toDataURL('image/png');
+};
+

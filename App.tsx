@@ -10,7 +10,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import ImageEditorCanvas from './components/ImageEditorCanvas';
 // Fix: Removed unused and non-existent 'fileToDataUrl' import.
-import { dataUrlToFile, embedWatermark, loadImage, resizeImageToMatch, downloadImage, overlayLogo } from './utils/fileUtils';
+import { dataUrlToFile, embedWatermark, loadImage, resizeImageToMatch, downloadImage, overlayLogo, getFlagSpec, applyFlagToMaskedRegion } from './utils/fileUtils';
 import ImagePreviewModal from './components/ImagePreviewModal';
 import MultiImageUploader from './components/MultiImageUploader';
 import HistoryPanel from './components/HistoryPanel';
@@ -169,7 +169,7 @@ setLoadingMessage('Paso 2: Aplicando paleta de colores...');
                 secondaryImagePayload = { base64: secondaryBase64, mimeType: secondaryMimeType };
             }
 
-            const stepTwoResult = await editImage(
+            let stepTwoResult = await editImage(
                 stepOneImageBase64,
                 stepOneImageMimeType,
                 selectedTransformation.stepTwoPrompt!, // Second prompt
@@ -201,13 +201,26 @@ setLoadingMessage('Paso 2: Aplicando paleta de colores...');
                 secondaryImagePayload = { base64: secondaryBase64, mimeType: secondaryMimeType };
             }
 setLoadingMessage('Generando tu obra...');
-            const result = await editImage(
+            let result = await editImage(
                 primaryBase64, 
                 primaryMimeType, 
                 promptToUse,
                 maskBase64,
                 secondaryImagePayload
             );
+
+            // Deterministic post-proceso para bandera si procede
+            if (result.imageUrl && selectedTransformation?.title === 'Cambiar bandera de la pulsera' && maskDataUrl) {
+              const spec = getFlagSpec(paramValue);
+              if (spec) {
+                try {
+                  const replaced = await applyFlagToMaskedRegion(result.imageUrl, maskDataUrl, spec);
+                  result.imageUrl = replaced;
+                } catch (e) {
+                  console.warn('applyFlagToMaskedRegion failed, keeping model output', e);
+                }
+              }
+            }
 
             if (result.imageUrl) {
               let withMark = await embedWatermark(result.imageUrl, "Estudio Creativo");
@@ -373,14 +386,28 @@ placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un 
                          {selectedTransformation.requiresInputParam && (
                            <div className="mt-3 flex items-center gap-3">
                              <label htmlFor="trans-param" className="text-sm whitespace-nowrap">{selectedTransformation.paramLabel ?? 'Parámetro'}</label>
-                             <input
-                               id="trans-param"
-                               type="text"
-                               value={paramValue}
-                               onChange={(e) => setParamValue(e.target.value)}
-                               placeholder={selectedTransformation.paramPlaceholder ?? 'Escribe aquí'}
-                               className="flex-1 p-2 bg-gray-900 border border-white/20 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                             />
+                             {selectedTransformation.paramOptions && selectedTransformation.paramOptions.length > 0 ? (
+                               <select
+                                 id="trans-param"
+                                 value={paramValue}
+                                 onChange={(e) => setParamValue(e.target.value)}
+                                 className="flex-1 p-2 bg-gray-900 border border-white/20 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                               >
+                                 <option value="">Selecciona un país…</option>
+                                 {selectedTransformation.paramOptions.map(opt => (
+                                   <option key={opt} value={opt}>{opt}</option>
+                                 ))}
+                               </select>
+                             ) : (
+                               <input
+                                 id="trans-param"
+                                 type="text"
+                                 value={paramValue}
+                                 onChange={(e) => setParamValue(e.target.value)}
+                                 placeholder={selectedTransformation.paramPlaceholder ?? 'Escribe aquí'}
+                                 className="flex-1 p-2 bg-gray-900 border border-white/20 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                               />
+                             )}
                            </div>
                          )}
                        </>

@@ -19,6 +19,8 @@ export interface Transformation {
   paramPlaceholder?: string;
   /** Token in prompt to be replaced with the user value. Default: {country} */
   paramToken?: string;
+  /** Predefined options for the parameter. If present, render a select menu */
+  paramOptions?: string[];
   /** If true, encourage/require the user to draw a mask before generating */
   forceMaskTool?: boolean;
 }

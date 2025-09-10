@@ -154,6 +154,9 @@ export const TRANSFORMATIONS: Transformation[] = [
     requiresInputParam: true,
     paramLabel: "País",
     paramPlaceholder: "Italia",
+    paramOptions: [
+      'España','Italia','Francia','Alemania','Portugal','Países Bajos','Bélgica','Irlanda','Polonia','Austria','Rumanía','Hungría'
+    ],
     paramToken: "{country}",
     forceMaskTool: true
   }
