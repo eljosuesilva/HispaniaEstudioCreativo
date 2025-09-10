@@ -192,7 +192,7 @@ const ImageEditorCanvas: React.FC<ImageEditorCanvasProps> = ({ onImageSelect, in
             {!initialImageUrl ? (
                 <label htmlFor="file-upload" className="flex flex-col items-center justify-center text-gray-500 cursor-pointer w-full h-full">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.158 0h.008v.008h-.008V8.25z" /></svg>
-                    <p className="mb-2 text-sm"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                    <p className="mb-2 text-sm"><span className="font-semibold">Haz clic para subir</span> o arrastra y suelta</p>
                     <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
                 </label>
             ) : (
@@ -213,14 +213,14 @@ const ImageEditorCanvas: React.FC<ImageEditorCanvasProps> = ({ onImageSelect, in
         </div>
         {initialImageUrl && isMaskToolActive && (
             <div className="p-3 bg-black/60 backdrop-blur-md rounded-lg flex flex-col gap-4 border border-white/10 animate-fade-in-fast">
-                <p className="text-xs text-gray-400 -mb-2">Draw on the image to create a mask for localized edits.</p>
+<p className="text-xs text-gray-400 -mb-2">Dibuja sobre la imagen para crear una máscara para ediciones localizadas.</p>
                 <div className="flex items-center gap-4">
-                    <label htmlFor="brush-size" className="text-sm font-medium text-gray-200 whitespace-nowrap">Brush Size</label>
+<label htmlFor="brush-size" className="text-sm font-medium text-gray-200 whitespace-nowrap">Tamaño del pincel</label>
                     <input id="brush-size" type="range" min="5" max="100" value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <button onClick={handleUndo} disabled={history.length === 0} className="px-4 py-2 text-sm font-semibold text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors">Undo</button>
-                    <button onClick={clearMask} disabled={history.length === 0} className="px-4 py-2 text-sm font-semibold text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors">Clear Mask</button>
+<button onClick={handleUndo} disabled={history.length === 0} className="px-4 py-2 text-sm font-semibold text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors">Deshacer</button>
+<button onClick={clearMask} disabled={history.length === 0} className="px-4 py-2 text-sm font-semibold text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors">Limpiar máscara</button>
                 </div>
             </div>
         )}

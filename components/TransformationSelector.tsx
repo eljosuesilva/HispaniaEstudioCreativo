@@ -49,11 +49,11 @@ const TransformationSelector: React.FC<TransformationSelectorProps> = ({ transfo
 
   return (
     <div className="container mx-auto p-4 md:p-8 animate-fade-in">
-      <h2 className="text-3xl font-bold text-center mb-4 text-orange-500">Let's Go Bananas!</h2>
+<h2 className="text-3xl font-bold text-center mb-4 text-orange-500">¡Vamos a crear!</h2>
       <p className="text-lg text-center text-gray-400 mb-8 max-w-2xl mx-auto">
-        {hasPreviousResult 
-          ? "That was fun! Your last creation is ready for another round. Select a new effect to keep the chain going."
-          : "Ready to remix your reality? Pick an effect to start the magic. You can also drag and drop to reorder your favorite effects."
+{hasPreviousResult 
+          ? "¡Qué divertido! Tu última creación está lista para otra ronda. Selecciona un nuevo efecto para continuar la cadena."
+          : "¿Listo para remezclar tu realidad? Elige un efecto para comenzar. También puedes arrastrar y soltar para reordenar tus efectos favoritos."
         }
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

@@ -1,21 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🍌 Nano Bananary｜ZHO</title>
+    <title>Estudio Creativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.17.0"
-  }
-}
-</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <style id="ec-theme">
+      :root {
+        --color-rojo: #C60000;
+        --color-amarillo: #FFC71F;
+        --color-azul-marino: #0939FF;
+        --color-verde-botella: #078930;
+        --color-blanco: #FFFFFF;
+        --color-gris-claro: #F5F5F5;
+        --color-gris-oscuro: #333333;
+      }
+      /* Tipografía */
+      html, body { font-family: 'Mulish', sans-serif !important; }
+      /* Base */
+      body.bg-black { background-color: var(--color-blanco) !important; color: var(--color-gris-oscuro) !important; }
+      /* Tipografía general en superficies claras */
+      .text-gray-300, .text-gray-200, .text-gray-400 { color: var(--color-gris-oscuro) !important; }
+      /* Superficies (tarjetas y contenedores) */
+      .bg-gray-950, .bg-gray-900, .bg-gray-950\/60, .bg-gray-800, .bg-gray-800\/50, .bg-gray-700, .bg-gray-700\/50 { background-color: var(--color-blanco) !important; color: var(--color-gris-oscuro) !important; }
+      /* Bordes sutiles */
+      .border-white\/10, .border-white\/20 { border-color: rgba(51,51,51,0.12) !important; }
+      /* Acentos (mapeo de naranja/amarillo a tu rojo/amarillo) */
+      .text-orange-500 { color: var(--color-rojo) !important; }
+      .hover\:text-orange-400:hover { color: var(--color-amarillo) !important; }
+      .from-orange-500 { --tw-gradient-from: var(--color-rojo) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgb(255 199 31 / 0)) !important; }
+      .to-yellow-400 { --tw-gradient-to: var(--color-amarillo) !important; }
+      .hover\:from-orange-600:hover { --tw-gradient-from: var(--color-rojo) !important; }
+      .hover\:to-yellow-500:hover { --tw-gradient-to: var(--color-amarillo) !important; }
+      /* Botones con grises al pasar el ratón */
+      .hover\:bg-gray-700:hover, .hover\:bg-gray-700\/50:hover { background-color: var(--color-gris-claro) !important; color: var(--color-gris-oscuro) !important; }
+      /* Áreas de entrada */
+      .bg-gray-900, textarea.bg-gray-900 { background-color: var(--color-gris-claro) !important; }
+      .placeholder-gray-500::placeholder { color: #8A8A8A !important; }
+      /* Control del tamaño del embed de Imgur en el header */
+      .header-logo-embed { width: 40px; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+      .header-logo-embed .imgur-embed-pub { max-width: 40px !important; }
+      iframe[src*="imgur.com"] { width: 40px !important; height: 40px !important; }
+    </style>
+    <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 </head>
   <body class="bg-black text-gray-300">
     <div id="root"></div>

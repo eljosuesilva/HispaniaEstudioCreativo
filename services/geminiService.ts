@@ -3,7 +3,7 @@ import { GoogleGenAI, Modality } from "@google/genai";
 import type { GeneratedContent } from '../types';
 
 if (!process.env.API_KEY) {
-  throw new Error("API_KEY environment variable is not set.");
+throw new Error("La variable de entorno API_KEY no está definida.");
 }
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -75,11 +75,11 @@ export async function editImage(
     if (!result.imageUrl) {
         const finishReason = response.candidates?.[0]?.finishReason;
         const safetyRatings = response.candidates?.[0]?.safetyRatings;
-        let errorMessage = "The model did not return an image. It might have refused the request. Please try a different image or prompt.";
+let errorMessage = "El modelo no devolvió una imagen. Es posible que haya rechazado la solicitud. Prueba con una imagen o prompt diferente.";
         
         if (finishReason === 'SAFETY') {
             const blockedCategories = safetyRatings?.filter(r => r.blocked).map(r => r.category).join(', ');
-            errorMessage = `The request was blocked for safety reasons. Categories: ${blockedCategories || 'Unknown'}. Please modify your prompt or image.`;
+errorMessage = `La solicitud fue bloqueada por motivos de seguridad. Categorías: ${blockedCategories || 'Desconocidas'}. Modifica tu prompt o imagen.`;
         }
         
         throw new Error(errorMessage);
@@ -88,7 +88,7 @@ export async function editImage(
     return result;
 
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
+console.error("Error al llamar a la API de Gemini:", error);
     if (error instanceof Error) {
         let errorMessage = error.message;
         try {
@@ -97,9 +97,9 @@ export async function editImage(
             if (parsedError.error && parsedError.error.message) {
                 // Add a user-friendly message for common errors.
                 if (parsedError.error.status === 'RESOURCE_EXHAUSTED') {
-                    errorMessage = "You've likely exceeded the request limit. Please wait a moment before trying again.";
+errorMessage = "Probablemente has superado el límite de solicitudes. Espera un momento antes de intentarlo de nuevo.";
                 } else if (parsedError.error.code === 500 || parsedError.error.status === 'UNKNOWN') {
-                    errorMessage = "An unexpected server error occurred. This might be a temporary issue. Please try again in a few moments.";
+errorMessage = "Ocurrió un error inesperado en el servidor. Puede ser temporal. Inténtalo de nuevo en unos momentos.";
                 } else {
                     errorMessage = parsedError.error.message;
                 }
@@ -109,6 +109,6 @@ export async function editImage(
         }
         throw new Error(errorMessage);
     }
-    throw new Error("An unknown error occurred while communicating with the API.");
+throw new Error("Ocurrió un error desconocido al comunicarse con la API.");
   }
 }

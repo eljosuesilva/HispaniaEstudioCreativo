@@ -107,17 +107,17 @@ const App: React.FC = () => {
 
   const handleGenerate = useCallback(async () => {
     if (!primaryImageUrl || !selectedTransformation) {
-        setError("Please upload an image and select an effect.");
+setError("Por favor sube una imagen y selecciona un efecto.");
         return;
     }
     if (selectedTransformation.isMultiImage && !secondaryImageUrl) {
-        setError("Please upload both required images.");
+setError("Por favor sube las dos imágenes requeridas.");
         return;
     }
     
     const promptToUse = selectedTransformation.prompt === 'CUSTOM' ? customPrompt : selectedTransformation.prompt;
     if (!promptToUse.trim()) {
-        setError("Please enter a prompt describing the change you want to see.");
+setError("Por favor escribe un prompt que describa el cambio que deseas ver.");
         return;
     }
 
@@ -133,7 +133,7 @@ const App: React.FC = () => {
 
         if (selectedTransformation.isTwoStep) {
             // Step 1: Generate line art (using only the primary image)
-            setLoadingMessage('Step 1: Creating line art...');
+setLoadingMessage('Paso 1: Creando dibujo de líneas...');
             const stepOneResult = await editImage(
                 primaryBase64,
                 primaryMimeType,
@@ -143,11 +143,11 @@ const App: React.FC = () => {
             );
 
             if (!stepOneResult.imageUrl) {
-                throw new Error("Step 1 (line art) failed to generate an image.");
+throw new Error("El paso 1 (dibujo de líneas) no generó una imagen.");
             }
 
             // Step 2: Color the line art using the palette
-            setLoadingMessage('Step 2: Applying color palette...');
+setLoadingMessage('Paso 2: Aplicando paleta de colores...');
             const stepOneImageBase64 = stepOneResult.imageUrl.split(',')[1];
             const stepOneImageMimeType = stepOneResult.imageUrl.split(';')[0].split(':')[1] ?? 'image/png';
 
@@ -172,7 +172,7 @@ const App: React.FC = () => {
             );
             
             if (stepTwoResult.imageUrl) {
-                stepTwoResult.imageUrl = await embedWatermark(stepTwoResult.imageUrl, "Nano Bananary｜ZHO");
+stepTwoResult.imageUrl = await embedWatermark(stepTwoResult.imageUrl, "Estudio Creativo");
             }
 
             const finalResult = {
@@ -190,7 +190,7 @@ const App: React.FC = () => {
                 const secondaryBase64 = secondaryImageUrl.split(',')[1];
                 secondaryImagePayload = { base64: secondaryBase64, mimeType: secondaryMimeType };
             }
-            setLoadingMessage('Generating your masterpiece...');
+setLoadingMessage('Generando tu obra...');
             const result = await editImage(
                 primaryBase64, 
                 primaryMimeType, 
@@ -200,7 +200,7 @@ const App: React.FC = () => {
             );
 
             if (result.imageUrl) {
-                result.imageUrl = await embedWatermark(result.imageUrl, "Nano Bananary｜ZHO");
+result.imageUrl = await embedWatermark(result.imageUrl, "Estudio Creativo");
             }
 
             setGeneratedContent(result);
@@ -208,7 +208,7 @@ const App: React.FC = () => {
         }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "An unknown error occurred.");
+setError(err instanceof Error ? err.message : "Ocurrió un error desconocido.");
     } finally {
       setIsLoading(false);
       setLoadingMessage('');
@@ -286,18 +286,23 @@ const App: React.FC = () => {
       <header className="bg-black/60 backdrop-blur-lg sticky top-0 z-20 p-4 border-b border-white/10">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-yellow-400 cursor-pointer" onClick={handleResetApp}>
-            🍌 Nano Bananary｜ZHO
+            Estudio Creativo
           </h1>
-          <button
+          <div className="flex items-center gap-3">
+            <div className="header-logo-embed">
+              <blockquote className="imgur-embed-pub" lang="en" data-id="nlRBQtX"><a href="https://imgur.com/nlRBQtX">View post on imgur.com</a></blockquote>
+            </div>
+            <button
             onClick={toggleHistoryPanel}
             className="flex items-center gap-2 py-2 px-3 text-sm font-semibold text-gray-200 bg-gray-800/50 rounded-md hover:bg-gray-700/50 transition-colors duration-200"
-            aria-label="Toggle generation history"
+aria-label="Mostrar/ocultar historial"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
             </svg>
-            <span>History</span>
+<span>Historial</span>
           </button>
+          </div>
         </div>
       </header>
 
@@ -319,7 +324,7 @@ const App: React.FC = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
-                Choose Another Effect
+Elegir otro efecto
               </button>
             </div>
 
@@ -336,7 +341,7 @@ const App: React.FC = () => {
                         <textarea
                             value={customPrompt}
                             onChange={(e) => setCustomPrompt(e.target.value)}
-                            placeholder="e.g., 'make the sky a vibrant sunset' or 'add a small red boat on the water'"
+placeholder="p. ej., 'convierte el cielo en un atardecer vibrante' o 'agrega un pequeño barco rojo en el agua'"
                             rows={3}
                             className="w-full mt-2 p-3 bg-gray-900 border border-white/20 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors placeholder-gray-500"
                         />
@@ -377,7 +382,7 @@ const App: React.FC = () => {
                             }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L15.232 5.232z" /></svg>
-                            <span>Draw Mask</span>
+<span>Dibujar máscara</span>
                         </button>
                     </div>
                   )}
@@ -393,14 +398,14 @@ const App: React.FC = () => {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span>Generating...</span>
+<span>Generando...</span>
                       </>
                     ) : (
                       <>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
-                        <span>Generate Image</span>
+<span>Generar imagen</span>
                       </>
                     )}
                   </button>
@@ -409,7 +414,7 @@ const App: React.FC = () => {
 
               {/* Output Column */}
               <div className="flex flex-col p-6 bg-gray-950/60 backdrop-blur-lg rounded-xl border border-white/10 shadow-2xl shadow-black/20">
-                <h2 className="text-xl font-semibold mb-4 text-orange-500 self-start">Result</h2>
+<h2 className="text-xl font-semibold mb-4 text-orange-500 self-start">Resultado</h2>
                 {isLoading && <div className="flex-grow flex items-center justify-center"><LoadingSpinner message={loadingMessage} /></div>}
                 {error && <div className="flex-grow flex items-center justify-center w-full"><ErrorMessage message={error} /></div>}
                 {!isLoading && !error && generatedContent && (
@@ -425,7 +430,7 @@ const App: React.FC = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p className="mt-2">Your generated image will appear here.</p>
+<p className="mt-2">Aquí aparecerá tu imagen generada.</p>
                   </div>
                 )}
               </div>
