@@ -436,18 +436,23 @@ export const applyFlagToMaskedRegion = async (
   const total = flag.stripes.reduce((acc, s) => acc + s.ratio, 0);
   if (flag.orientation === 'vertical') {
     let cursor = minX;
-    for (const seg of flag.stripes) {
-      const w = Math.round((seg.ratio / total) * bw);
+    for (let i = 0; i < flag.stripes.length; i++) {
+      const seg = flag.stripes[i];
+      // Use remaining space for the last stripe to avoid gaps por rounding
+      const isLast = i === flag.stripes.length - 1;
+      const w = isLast ? (minX + bw - cursor) : Math.round((seg.ratio / total) * bw);
       sctx.fillStyle = seg.color;
-      sctx.fillRect(cursor, minY, w, bh);
+      sctx.fillRect(cursor, minY, Math.max(1, w), bh);
       cursor += w;
     }
   } else {
     let cursor = minY;
-    for (const seg of flag.stripes) {
-      const h = Math.round((seg.ratio / total) * bh);
+    for (let i = 0; i < flag.stripes.length; i++) {
+      const seg = flag.stripes[i];
+      const isLast = i === flag.stripes.length - 1;
+      const h = isLast ? (minY + bh - cursor) : Math.round((seg.ratio / total) * bh);
       sctx.fillStyle = seg.color;
-      sctx.fillRect(minX, cursor, bw, h);
+      sctx.fillRect(minX, cursor, bw, Math.max(1, h));
       cursor += h;
     }
   }
@@ -479,6 +484,42 @@ export const applyFlagToMaskedRegion = async (
   ctx.globalCompositeOperation = 'multiply';
   ctx.drawImage(shade, 0, 0);
   ctx.globalCompositeOperation = 'source-over';
+
+  return canvas.toDataURL('image/png');
+};
+
+/**
+ * Composes the edited image into the base image strictly within the mask region.
+ * Outside the mask, the original base remains intact regardless of model output.
+ */
+export const compositeWithMask = async (
+  baseImageDataUrl: string,
+  editedImageDataUrl: string,
+  maskDataUrl: string
+): Promise<string> => {
+  const baseImg = await loadImage(baseImageDataUrl);
+  const editedImg = await loadImage(editedImageDataUrl);
+  const maskImg = await loadImage(maskDataUrl);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = baseImg.width; canvas.height = baseImg.height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not get canvas context.');
+
+  // Start with original base
+  ctx.drawImage(baseImg, 0, 0);
+
+  // Create edited × mask layer
+  const masked = document.createElement('canvas');
+  masked.width = baseImg.width; masked.height = baseImg.height;
+  const mctx = masked.getContext('2d')!;
+  mctx.drawImage(editedImg, 0, 0, masked.width, masked.height);
+  mctx.globalCompositeOperation = 'destination-in';
+  mctx.drawImage(maskImg, 0, 0, masked.width, masked.height);
+  mctx.globalCompositeOperation = 'source-over';
+
+  // Overlay masked edit onto base
+  ctx.drawImage(masked, 0, 0);
 
   return canvas.toDataURL('image/png');
 };

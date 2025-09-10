@@ -10,7 +10,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import ImageEditorCanvas from './components/ImageEditorCanvas';
 // Fix: Removed unused and non-existent 'fileToDataUrl' import.
-import { dataUrlToFile, embedWatermark, loadImage, resizeImageToMatch, downloadImage, overlayLogo, getFlagSpec, applyFlagToMaskedRegion } from './utils/fileUtils';
+import { dataUrlToFile, embedWatermark, loadImage, resizeImageToMatch, downloadImage, overlayLogo, getFlagSpec, applyFlagToMaskedRegion, compositeWithMask } from './utils/fileUtils';
 import ImagePreviewModal from './components/ImagePreviewModal';
 import MultiImageUploader from './components/MultiImageUploader';
 import HistoryPanel from './components/HistoryPanel';
@@ -215,7 +215,8 @@ setLoadingMessage('Generando tu obra...');
               if (spec) {
                 try {
                   const replaced = await applyFlagToMaskedRegion(result.imageUrl, maskDataUrl, spec);
-                  result.imageUrl = replaced;
+                  // Componer estrictamente dentro de la máscara para impedir derrames
+                  result.imageUrl = await compositeWithMask(primaryImageUrl!, replaced, maskDataUrl);
                 } catch (e) {
                   console.warn('applyFlagToMaskedRegion failed, keeping model output', e);
                 }
